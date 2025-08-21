@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandos para ONU/Roteador</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            color: #333;
+        }
+        
+        /* Estilos da barra lateral */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(180deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 20px 0;
+            height: 100vh;
+            position: fixed;
+            box-shadow: 3px 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 1.5rem;
+        }
+        
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px 25px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+        }
+        
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #ffd700;
+            padding-left: 30px;
+        }
+        
+        /* Conteúdo principal */
+        .main-content {
+            margin-left: 250px;
+            padding: 40px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+        }
+        
+        .main-content h2 {
+            margin-bottom: 30px;
+            color: #2d3748;
+            font-size: 28px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .main-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            border-radius: 2px;
+        }
+        
+        .search-box {
+            margin: 20px 0;
+            display: flex;
+        }
+        
+        #searchInput {
+            padding: 12px 20px;
+            width: 100%;
+            max-width: 500px;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .commands-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .command-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .command-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .command-title {
+            color: #2d3748;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4b6cb7;
+        }
+        
+        .command-content {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.3s;
+            display: block;
+            margin-left: auto;
+        }
+        
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #718096;
+        }
+        
+        .highlight {
+            background-color: #ffd700;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+                padding: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 15px 0;
+            }
+            
+            .sidebar h2 {
+                margin-bottom: 15px;
+            }
+            
+            .sidebar a {
+                display: inline-block;
+                padding: 10px 15px;
+                border-left: none;
+                border-bottom: 2px solid transparent;
+            }
+            
+            .sidebar a:hover {
+                border-left: none;
+                border-bottom: 2px solid #ffd700;
+                padding-left: 15px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+            
+            .commands-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .command-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .command-card:nth-child(1) { animation-delay: 0.1s; }
+        .command-card:nth-child(2) { animation-delay: 0.2s; }
+        .command-card:nth-child(3) { animation-delay: 0.3s; }
+        .command-card:nth-child(4) { animation-delay: 0.4s; }
+        .command-card:nth-child(5) { animation-delay: 0.5s; }
+        .command-card:nth-child(6) { animation-delay: 0.6s; }
+        .command-card:nth-child(7) { animation-delay: 0.7s; }
+        .command-card:nth-child(8) { animation-delay: 0.8s; }
+        .command-card:nth-child(9) { animation-delay: 0.9s; }
+        .command-card:nth-child(10) { animation-delay: 1.0s; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="buscar_senhas.html">Buscar Senha</a>
+        <a href="comandos.html" style="background: rgba(255, 255, 255, 0.1); border-left: 4px solid #ffd700; padding-left: 30px;">Comandos</a>
+        <a href="sac.html">SAC</a>
+        <a href="suporte.html">Suporte</a>
+    </div>
+
+    <div class="main-content">
+        <h2>Comandos para ONU/Roteador</h2>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Pesquisar comandos...">
+        </div>
+        
+        <div class="commands-container">
+            <div class="command-card">
+                <h3 class="command-title">VER FIBRA</h3>
+                <div class="command-content">cfgcli -g InternetGatewayDevice.X_ALU_OntOpticalParam.RXPower</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">CONSULTAR IP</h3>
+                <div class="command-content">cfgcli -g InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.ExternalIPAddress
+
+cfgcli -s InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Username ana_6642715_air
+cfgcli -s InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.Password L5uai8</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">ALTERAR SSID E SENHA</h3>
+                <div class="command-content">cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID Amanda
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.PreSharedKey.1.PreSharedKey Lurycosta@26091985
+
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.SSID Amanda_5G
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.PreSharedKey.1.PreSharedKey Lurycosta@26091985</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">OCULTAR OU DEIXAR VISÍVEL A REDE WI-FI</h3>
+                <div class="command-content">cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSIDAdvertisementEnabled true
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.SSIDAdvertisementEnabled true</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">HABILITAR WLAN</h3>
+                <div class="command-content">cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.Enable True
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.Enable True</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">LENTIDÃO</h3>
+                <div class="command-content">cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.Standard "b,g,n"
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.AutoChannelEnable false
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.AutoChannelEnable false
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.X_CT-COM_ChannelWidth 2
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.X_CT-COM_ChannelWidth 2
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.Channel 0
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.Channel 0
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.WPSEnable 0
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.WPSEnable 0
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.BeaconType 11i
+cfgcli -s InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.BeaconType 11i</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">ALTERAR MTU</h3>
+                <div class="command-content">cfgcli -s InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.InterfaceMtu 1480</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">ALTERAR DNS LOCAL</h3>
+                <div class="command-content">cfgcli -s InternetGatewayDevice.LANDevice.1.LANHostConfigManagement.DNSServers 8.8.8.8, 8.8.4.4</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">VER O NOME DO WI-FI</h3>
+                <div class="command-content">cfgcli -g InternetGatewayDevice.LANDevice.1.WLANConfiguration.1.SSID
+cfgcli -g InternetGatewayDevice.LANDevice.1.WLANConfiguration.5.SSID</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">TEMPERATURA DA ONU</h3>
+                <div class="command-content">cfgcli -g InternetGatewayDevice.X_ALU_OntOpticalParam.TransceiverTemperature</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">LIBERAR ACESSO REMOTO (IP:8080)</h3>
+                <div class="command-content">cfgcli -s InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.X_ALU-COM_WanAccessCfg.HttpDisabled False</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">DESABILITAR ACESSO REMOTO</h3>
+                <div class="command-content">cfgcli -s InternetGatewayDevice.WANDevice.1.WANConnectionDevice.1.WANPPPConnection.1.X_ALU-COM_WanAccessCfg.HttpDisabled True</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+            
+            <div class="command-card">
+                <h3 class="command-title">ALTERAR A SENHA DO ACESSO REMOTO</h3>
+                <div class="command-content">USUARIO:
+cfgcli -s InternetGatewayDevice.X_Authentication.WebAccount.UserName AdminGPON
+
+TROCA DE SENHA:
+cfgcli -s InternetGatewayDevice.X_Authentication.WebAccount.Password Mudar@123</div>
+                <button class="copy-btn" onclick="copyToClipboard(this.previousElementSibling)">Copiar</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Sistema de Comandos &copy; 2023</p>
+        </div>
+    </div>
+
+    <script>
+        // Função para copiar o conteúdo do comando
+        function copyToClipboard(element) {
+            const text = element.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = element.nextElementSibling.textContent;
+                element.nextElementSibling.textContent = "Copiado!";
+                setTimeout(() => {
+                    element.nextElementSibling.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Erro ao copiar texto: ', err);
+            });
+        }
+        
+        // Função de busca
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const commandCards = document.querySelectorAll('.command-card');
+            
+            commandCards.forEach(card => {
+                const title = card.querySelector('.command-title').textContent.toLowerCase();
+                const content = card.querySelector('.command-content').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || content.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    
+                    // Destacar o termo buscado
+                    if (searchTerm) {
+                        const regex = new RegExp(searchTerm, 'gi');
+                        card.querySelector('.command-content').innerHTML = 
+                            card.querySelector('.command-content').textContent
+                                .replace(regex, match => `<span class="highlight">${match}</span>`);
+                    } else {
+                        // Restaurar o conteúdo original se não houver termo de busca
+                        card.querySelector('.command-content').innerHTML = 
+                            card.querySelector('.command-content').textContent;
+                    }
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

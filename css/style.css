@@ -1,0 +1,107 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+}
+
+/* Sidebar lateral */
+.sidebar {
+  height: 100vh;
+  width: 220px;
+  background-color: #2c3e50;
+  color: white;
+  padding: 20px;
+  position: fixed;
+}
+
+.sidebar h2 {
+  text-align: center;
+}
+
+.sidebar a {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  text-decoration: none; /* remove sublinhado */
+  background-color: #34495e;
+  color: white;
+  cursor: pointer;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.sidebar a:hover {
+  background-color: #1abc9c;
+}
+
+
+.sidebar button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: none;
+  background-color: #34495e;
+  color: white;
+  cursor: pointer;
+  text-align: left;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.sidebar button:hover {
+  background-color: #1abc9c;
+}
+
+/* Conteúdo principal */
+.main-content {
+  margin-left: 240px;
+  padding: 20px;
+  width: calc(100% - 240px);
+}
+
+/* Tabs */
+.tabcontent {
+  display: none;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  background-color: #ecf0f1; /* Fundo claro padrão */
+  color: #2c3e50; /* Cor do texto */
+}
+
+/* Input de busca */
+#serial {
+  padding: 8px;
+  width: 250px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  color: #2c3e50;
+}
+
+#buscarBtn {
+  padding: 8px 12px;
+  cursor: pointer;
+  border: none;
+  background-color: #34495e;
+  color: white;
+  border-radius: 4px;
+}
+
+#buscarBtn:hover {
+  background-color: #1abc9c;
+}
+
+/* Resultados */
+#resultados li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+  color: #2c3e50;
+}
